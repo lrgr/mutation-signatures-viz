@@ -1,0 +1,1 @@
+python example_sbs_plot.py -if cosmic-signatures.tsv -of Glioblastoma-COSMIC-signatures.png -as 1 5 11 -t "Glioblastoma COSMIC signatures "

@@ -1,0 +1,1 @@
+wget -O cosmic-signatures.tsv https://obj.umiacs.umd.edu/mutation-signature-explorer/signatures/cosmic/cosmic-signatures.tsv
