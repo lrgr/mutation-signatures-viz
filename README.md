@@ -1,5 +1,7 @@
 # Mutation signatures visualization
 
+![TravisCIBuildBadge](https://travis-ci.com/lrgr/mutation-signatures-viz.svg?token=xpopk4qvQzXty9qXHH3S&branch=master)
+
 A repository with scripts and functions for visualizations related to mutation signatures.
 
 ## Setup
