@@ -26,3 +26,6 @@ We do provide one example in [`example/`](example/) to generate a single base su
 
     cd example
     snakemake all
+
+When the build is not broken, Travis CI automatically runs the example and updates the image below:
+![Glioblastoma COSMIC SBS signatures](http://mutation-signatures-viz.lrgr.io/Glioblastoma-COSMIC-signatures.png)
