@@ -48,13 +48,21 @@ def sbs_signature_plot(data, fig=None, sharex=False, sharey='row',
                        ylabel='Probability',
                        palette=COSMIC, fontsize=8, **kwargs):
     # Create the figure (if necessary)
-    K, L = data.values.shape
+    if len(data.values.shape) > 1:
+        K, L = data.values.shape
+    else:
+        K = 1
+        L = len(data.values)
+        
     if not fig:
-        fig, axes = plt.subplots(K, N_SUBS, figsize=(K*5, 5), sharex=sharex,
+        fig, axes = plt.subplots(K, N_SUBS, figsize=(15, K*5), sharex=sharex,
                                  sharey=sharey)
     else:
         axes = fig.axes
 
+    if K == 1:
+        axes = np.array([axes])
+        
     # Get a list of categories
     categories = data.columns
     cat_index = dict(zip(categories, range(L)))
