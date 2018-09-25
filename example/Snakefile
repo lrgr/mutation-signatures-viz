@@ -1,0 +1,40 @@
+################################################################################
+# SETUP
+################################################################################
+# Modules
+from os.path import join
+
+# Configuration
+config['active_signatures'] = [1, 5, 11]
+config['cancer_type'] = 'Glioblastoma'
+
+# Files
+COSMIC_SIGNATURES = 'cosmic-signatures.tsv'
+EXAMPLE_SBS_PLOT_PY = 'example_sbs_plot.py'
+
+COSMIC_SBS_PLOT_PNG = '%s-COSMIC-signatures.png' % '_'.join(config.get('cancer_type').split(' '))
+
+################################################################################
+# RULES
+################################################################################
+# General
+rule all:
+    input:
+        COSMIC_SIGNATURES
+    params:
+        active_signatures=config.get('active_signatures'),
+        cancer_type=config.get('cancer_type')
+    output:
+        COSMIC_SBS_PLOT_PNG
+    shell:
+        'python {EXAMPLE_SBS_PLOT_PY} -if {input} -of {output} '\
+        '-as {params.active_signatures} -t "{params.cancer_type} COSMIC signatures "'
+
+# Download the COSMIC signatures
+rule download_cosmic_signatures:
+    params:
+        url='https://obj.umiacs.umd.edu/mutation-signature-explorer/signatures/cosmic/cosmic-signatures.tsv'
+    output:
+        COSMIC_SIGNATURES
+    shell:
+        'wget -O {output} {params.url}'

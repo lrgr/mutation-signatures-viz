@@ -1,0 +1,12 @@
+name: mutation-signatures-viz-env
+channels:
+  - bioconda
+dependencies:
+  - python>=3.6
+  - anaconda
+  - pandas
+  - numpy
+  - snakemake
+  - matplotlib
+  - seaborn
+  - xlrd
