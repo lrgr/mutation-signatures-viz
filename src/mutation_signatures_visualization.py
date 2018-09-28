@@ -49,39 +49,50 @@ GREY = (203./255, 203./255, 203./255)
 ################################################################################
 def sbs_signature_plot(data, fig=None, sharex=False, sharey='row',
                        xlabel='Trinucleotide sequence motifs',
-                       ylabel='Probability',
+                       ylabel='Probability', row_labels=True,
+                       title=None,
                        palette=COSMIC, fontsize=8, **kwargs):
-    # Create the figure (if necessary)
+    # Set up parameters
     if len(data.values.shape) > 1:
         K, L = data.values.shape
     else:
         K = 1
         L = len(data.values)
 
-    # if not fig:
-    #     fig, axes = plt.subplots(K, N_SUBS, figsize=(15, K*5), sharex=sharex,
-    #                              sharey=sharey)
-    # else:
-    #     axes = fig.axes
-    #
-    # if K == 1:
-    #     axes = np.array([axes])
+    if row_labels:
+        row_mult = 2
+        height_ratios = [ h for _ in range(K) for h in [1, 4] ]
+    else:
+        row_mult = 1
+        height_ratios = [ h for _ in range(K) for h in [1] ]
 
     # Get a list of categories
-    fig = plt.figure(figsize=(15, K*5.1))
-    gs = gridspec.GridSpec(2*K, N_SUBS, height_ratios=[ h for _ in range(K) for h in [1, 10] ])
     categories = data.columns
     cat_index = dict(zip(categories, range(L)))
     row_index = list(data.index)
 
     # Plot the number/probability of mutations per each substitution type
+    fig = plt.figure(figsize=(15, K*3.1))
+    gs = gridspec.GridSpec(row_mult*K, N_SUBS, height_ratios=height_ratios)
     for i in range(K):
-        cax = plt.subplot(gs[2*i, :])
-        cax.get_xaxis().set_visible(False)
-        cax.get_yaxis().set_visible(False)
-        cax.set_facecolor(GREY)
-        at = AnchoredText(row_index[i], loc=10, prop=dict(backgroundcolor=GREY, size=12, color='black'))
-        cax.add_artist(at)
+        #  Add row labels (if necessary)
+        if row_labels:
+            cax = plt.subplot(gs[2*i, :])
+            cax.get_xaxis().set_visible(False)
+            cax.get_yaxis().set_visible(False)
+            cax.set_facecolor(GREY)
+            at = AnchoredText(row_index[i], loc=10, frameon=False, prop=dict(backgroundcolor=GREY, size=12, color='black'))
+            cax.add_artist(at)
+
+        # Add plot title (if necessary)
+        if i == 0:
+            if not (title is None) and not row_labels:
+                plt.sup_title(title)
+            elif not (title is None):
+                at = AnchoredText(title, loc=6, frameon=False, prop=dict(backgroundcolor=GREY, size=12, weight='bold', color='black'))
+                cax.add_artist(at)
+
+        # Plot distributiton per substitution type
         for j, sub in enumerate(SUBS):
             # Get the list of active categories
             sub_cats = [ c for c in categories if sub in c ]
@@ -99,15 +110,8 @@ def sbs_signature_plot(data, fig=None, sharex=False, sharey='row',
             ax.set_xticklabels(xticklabels, rotation='vertical', fontsize=fontsize)
             ax.set_title(sub)
 
-        # Add shared header
-        # divider = make_axes_locatable(axes[i,len(SUBS)-1])
-        # cax = divider.append_axes("right", size="15%", pad=0)
-        # cax.get_xaxis().set_visible(False)
-        # cax.get_yaxis().set_visible(False)
-        # cax.set_facecolor((203./255, 203./255, 203./255))
-        #
-        # at = AnchoredText(row_index[i], loc=9, prop=dict(backgroundcolor=(203./255, 203./255, 203./255), size=8, color='black', rotation=270))
-        # cax.add_artist(at)
+            if i == K-1:
+                ax.set_xlabel(xlabel)
 
-    fig.text(0.5, 0.01, xlabel, ha='center') # shared xlabel
-    fig.text(0.01, 0.5, ylabel, ha='center', rotation='vertical') # shared ylabel
+            if j == 0:
+                ax.set_ylabel(ylabel)

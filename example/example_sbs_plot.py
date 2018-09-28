@@ -28,7 +28,6 @@ if len(args.active_signatures) > 0:
     print('Restricted to signatures: %s' % ', '.join(map(str, args.active_signatures)))
 
 # Plot and save to file
-sbs_signature_plot(sig_df, sharey=True)
-plt.suptitle(args.title)
+sbs_signature_plot(sig_df, title=args.title, sharey=True)
 plt.tight_layout(pad=2)
 plt.savefig(args.output_file)
