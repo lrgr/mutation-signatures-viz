@@ -104,7 +104,11 @@ def sbs_signature_plot(data, fig=None, sharex=False, sharey='row',
             y = data.values[i, sub_cat_idx]
 
             # Plot
-            ax = plt.subplot(gs[2*i+1, j])
+            if (sharey == 'row' and j == 0) or (sharey and j == 0 and i == 0):
+                first_ax = ax = plt.subplot(gs[2*i+1, j])
+            else:
+                ax = plt.subplot(gs[2*i+1, j], sharey=first_ax)
+
             ax.bar(x, y, align='center', color=STYLES[palette][SUB_COLOR][sub])
             ax.set_xticks(x)
             ax.set_xticklabels(xticklabels, rotation='vertical', fontsize=fontsize)
