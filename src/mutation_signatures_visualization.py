@@ -114,8 +114,11 @@ def sbs_signature_plot(data, fig=None, sharex=False, sharey='row',
             ax.set_xticklabels(xticklabels, rotation='vertical', fontsize=fontsize)
             ax.set_title(sub)
 
+            #  Add axis labels and ticks (sharing as necessary)
             if i == K-1:
                 ax.set_xlabel(xlabel)
 
             if j == 0:
                 ax.set_ylabel(ylabel)
+            elif sharey == 'row' or sharey:
+                plt.setp(ax.get_yticklabels(), visible=False)
