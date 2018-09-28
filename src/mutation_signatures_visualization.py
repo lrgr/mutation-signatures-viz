@@ -110,9 +110,17 @@ def sbs_signature_plot(data, fig=None, sharex=False, sharey='row',
                 ax = plt.subplot(gs[2*i+1, j], sharey=first_ax)
 
             ax.bar(x, y, align='center', color=STYLES[palette][SUB_COLOR][sub])
-            ax.set_xticks(x)
-            ax.set_xticklabels(xticklabels, rotation='vertical', fontsize=fontsize)
             ax.set_title(sub)
+
+            # Only show at most 16 xticklabels
+            if len(sub_cats) > 16:
+                offset = int(round(len(sub_cats)/16))
+                ax.grid(False)
+                ax.set_xticks(x[::offset])
+                ax.set_xticklabels(xticklabels[::offset], rotation='vertical', fontsize=fontsize)
+            else:
+                ax.set_xticks(x)
+                ax.set_xticklabels(xticklabels, rotation='vertical', fontsize=fontsize)
 
             #  Add axis labels and ticks (sharing as necessary)
             if i == K-1:
