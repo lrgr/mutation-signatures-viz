@@ -6,7 +6,7 @@
 # Load required module
 import matplotlib
 matplotlib.use('Agg')
-import sys, os, numpy as np, seaborn as sns, matplotlib.pyplot as plt
+import sys, os, numpy as np, seaborn as sns, matplotlib.pyplot as plt, pandas as pd
 from matplotlib.offsetbox import AnchoredText
 import matplotlib.gridspec as gridspec
 sns.set_style('whitegrid')
@@ -47,6 +47,33 @@ GREY = (203./255, 203./255, 203./255)
 ################################################################################
 # PLOTS
 ################################################################################
+
+# counts_df is samples-by-categories
+# exposures_df samples-by-signatures
+# signatures_df is signatures-by-categories
+def plot_signatures(counts_df, signature_df, exposure_df, output_file):
+    #contribs = pd.DataFrame(index=signature_df.columns, data=0)
+    output = []
+    # for each signature
+    for sig in signature_df.index:
+        contrib = 0.
+        # we want to iterate through each sample
+        for sample in exposure_df.index:
+            # and calculate the number of mutations attribution to signature i in sample j
+            contrib += exposure_df.loc[sample, sig]*counts_df.loc[sample].sum() # calculate the contribution
+        output.append(signature_df.loc[sig]*contrib)
+        #contribs[sig].append(phi[i]*contrib)
+    df = pd.concat(output, axis=1)
+    df = df.transpose()
+    # Plot the counts and signatures
+    # plt_df = pd.DataFrame(data=[X.sum(axis=0)] + contribs,
+    #                       index=['Counts'] + sig_names,
+    #                       columns=sbs96_df.columns)
+    sbs_signature_plot(df, palette=BROAD, ylabel='Count')
+    # Save to file
+    plt.tight_layout()
+    plt.savefig(output_file)
+
 def sbs_signature_plot(data, fig=None, sharex=False, sharey='row',
                        xlabel='Trinucleotide sequence motifs',
                        ylabel='Probability', row_labels=True,
