@@ -33,7 +33,7 @@ rule all:
 # Download the COSMIC signatures
 rule download_cosmic_signatures:
     params:
-        url='https://obj.umiacs.umd.edu/mutation-signature-explorer/signatures/cosmic/cosmic-signatures.tsv'
+        url='https://obj.umiacs.umd.edu/mutation-signature-explorer/signatures/COSMIC/processed/COSMIC-signatures.SBS-96.tsv'
     output:
         COSMIC_SIGNATURES
     shell:
